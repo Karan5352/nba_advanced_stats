@@ -1,4 +1,11 @@
-# VIBE - Valued Impact Basketball Estimate
+# 🏀 VIBE - NBA Advanced Analytics
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_App-orange?style=for-the-badge)](https://nba-advanced-stats.onrender.com)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat&logo=python)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.0-green?style=flat&logo=flask)](https://flask.palletsprojects.com)
+[![NBA API](https://img.shields.io/badge/NBA_API-Live_Data-red?style=flat&logo=nba)](https://github.com/swar/nba_api)
+
+> **Professional NBA player analytics featuring position-balanced VIBE metric | Modern Flask app with real-time NBA data**
 
 A comprehensive basketball analytics website featuring the **VIBE** metric - a sophisticated player evaluation system that combines offensive skill, defensive impact, and team performance.
 
@@ -245,9 +252,23 @@ nba_advanced_stats/
 
 **🏀 Live Demo**: Deploy to see 279 NBA players ranked by the position-balanced VIBE metric!
 
-# Run the website
-python3 app.py
+---
+
+## 🚀 Quick Start
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd nba_advanced_stats
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Run locally
+python run.py
 ```
+
+Visit http://localhost:8000 to explore NBA analytics with the official VIBE metric.
 
 Visit http://localhost:8000 to explore NBA analytics with the official VIBE metric.
 
