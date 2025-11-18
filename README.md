@@ -9,9 +9,9 @@
 
 A comprehensive basketball analytics website featuring the **VIBE** metric - a sophisticated player evaluation system that combines offensive skill, defensive impact, and team performance.
 
-## 🏀 Official VIBE Formula v2.0
+## 🏀 Official VIBE Formula v1.0
 
-VIBE is a standardized metric that evaluates players across multiple dimensions:
+VIBE (Valued Impact Basketball Estimate) is a standardized metric that evaluates players across multiple dimensions:
 
 ### Formula Components
 
@@ -267,10 +267,6 @@ pip install -r requirements.txt
 # Run locally
 python run.py
 ```
-
-Visit http://localhost:8000 to explore NBA analytics with the official VIBE metric.
-
-Visit http://localhost:8000 to explore NBA analytics with the official VIBE metric.
 
 ---
 
