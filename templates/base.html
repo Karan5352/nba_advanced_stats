@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NBA Advanced Stats{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            background: linear-gradient(135deg, #1a0000 0%, #000000 50%, #1a0a00 100%);
+            scroll-behavior: smooth;
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0000 0%, #000000 50%, #1a0a00 100%);
+            color: white;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
+            position: relative;
+        }
+        
+        /* Compact Professional Navbar */
+        .nav {
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 69, 0, 0.15) 0%, 
+                rgba(0, 0, 0, 0.95) 25%, 
+                rgba(20, 20, 20, 0.9) 75%, 
+                rgba(255, 69, 0, 0.1) 100%);
+            border-bottom: 2px solid rgba(255, 69, 0, 0.5);
+            box-shadow: 0 2px 15px rgba(255, 69, 0, 0.2), 0 1px 3px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            backdrop-filter: blur(15px);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.4rem 1rem;
+            gap: 0;
+        }
+        
+        .nav-brand {
+            color: #ff4500;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: auto;
+            text-shadow: 0 0 5px rgba(255, 69, 0, 0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        
+        .nav-card {
+            position: relative;
+        }
+        
+        .nav-card a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            border-right: 1px solid rgba(255, 69, 0, 0.2);
+            display: block;
+            position: relative;
+        }
+        
+        .nav-card:last-of-type a {
+            border-right: none;
+        }
+        
+        .nav-card a:hover {
+            background: rgba(255, 69, 0, 0.15);
+            color: #ff4500;
+        }
+        
+        .nav-card a.active {
+            background: rgba(255, 69, 0, 0.2);
+            color: #ff6500;
+            font-weight: 600;
+        }
+        
+        .season-card {
+            background: rgba(255, 69, 0, 0.1);
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            border-radius: 4px;
+            margin-left: 1rem;
+        }
+        
+        .season-card select {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .season-card select option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        }
+        
+        .season-card:hover {
+            border-color: rgba(255, 69, 0, 0.6);
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.2);
+        }
+        
+        .season-switcher select {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 90px;
+        }
+        
+        .season-switcher select option {
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+        }
+        
+        .season-switcher select option:hover,
+        .season-switcher select option:focus {
+            background: rgba(255, 69, 0, 0.3);
+            color: #ff4500;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            margin-top: 0.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 69, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            /* Enhanced scrolling */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #ff4500 rgba(0,0,0,0.3);
+        }
+        
+        /* Custom scrollbar for webkit browsers */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .table-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb {
+            background: #ff4500;
+            border-radius: 4px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #ff6500;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 1200px; /* Ensure minimum width for all columns */
+        }
+        
+        /* Updated column widths for expanded table */
+        th:nth-child(1), td:nth-child(1) { width: 4%; }   /* Rank */
+        th:nth-child(2), td:nth-child(2) { width: 15%; }  /* Player Name */
+        th:nth-child(3), td:nth-child(3) { width: 5%; }   /* Team */
+        th:nth-child(4), td:nth-child(4) { width: 6%; }   /* VIBE */
+        th:nth-child(5), td:nth-child(5) { width: 6%; }   /* OVIBE */
+        th:nth-child(6), td:nth-child(6) { width: 6%; }   /* DVIBE */
+        th:nth-child(7), td:nth-child(7) { width: 6%; }   /* Impact */
+        th:nth-child(n+8), td:nth-child(n+8) { width: 5%; } /* All other stats */
+        
+        /* Player name column specific styling */
+        th:nth-child(2), td:nth-child(2) {
+            text-align: left;
+            padding-left: 1rem;
+            padding-right: 0.5rem;
+            white-space: nowrap;
+            overflow: visible;
+            min-width: 160px;
+            max-width: none;
+        }
+        
+        th, td {
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 69, 0, 0.2);
+        }
+        
+        /* Header styling for VIBE component columns */
+        th:nth-child(4) {  /* VIBE header */
+            background: rgba(255, 69, 0, 0.25) !important;
+            color: #ff4500 !important;
+            font-weight: bold !important;
+        }
+        
+        th:nth-child(5) {  /* OVIBE header */
+            background: rgba(255, 69, 0, 0.15) !important;
+            color: #ff6500 !important;
+        }
+        
+        th:nth-child(6) {  /* DVIBE header */
+            background: rgba(255, 101, 0, 0.15) !important;
+            color: #ff6500 !important;
+        }
+        
+        th:nth-child(7) {  /* Impact header */
+            background: rgba(255, 133, 0, 0.15) !important;
+            color: #ff8500 !important;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ff4500;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid #ff4500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            padding: 0.5rem 0.3rem;
+            white-space: nowrap;
+        }
+        
+        th:hover {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #ff6500;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4), inset 0 0 10px rgba(255, 69, 0, 0.2);
+        }
+        
+        .sort-arrow {
+            margin-left: 0.3rem;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        
+        th:hover .sort-arrow {
+            opacity: 1;
+            color: #ff6500;
+        }
+        
+        td {
+            background: rgba(0,0,0,0.2);
+            color: #ffffff;
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 69, 0, 0.2);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        /* Alternating row styling - with lower specificity to allow VIBE column overrides */
+        tr:nth-child(even) td {
+            background: rgba(255, 69, 0, 0.03);
+        }
+        
+        /* VIBE component column styling - higher specificity to override alternating rows */
+        tr td:nth-child(4) {  /* VIBE - highest priority */
+            background: rgba(255, 69, 0, 0.15) !important;
+            font-weight: bold;
+            color: #ff4500;
+        }
+        
+        tr:nth-child(even) td:nth-child(4) {  /* VIBE on even rows */
+            background: rgba(255, 69, 0, 0.20) !important;
+        }
+        
+        tr td:nth-child(5) {  /* OVIBE */
+            background: rgba(255, 69, 0, 0.08) !important;
+            color: #ff6500;
+        }
+        
+        tr:nth-child(even) td:nth-child(5) {  /* OVIBE on even rows */
+            background: rgba(255, 69, 0, 0.12) !important;
+        }
+        
+        tr td:nth-child(6) {  /* DVIBE */
+            background: rgba(255, 101, 0, 0.08) !important;
+            color: #ff6500;
+        }
+        
+        tr:nth-child(even) td:nth-child(6) {  /* DVIBE on even rows */
+            background: rgba(255, 101, 0, 0.12) !important;
+        }
+        
+        tr td:nth-child(7) {  /* Impact */
+            background: rgba(255, 133, 0, 0.08) !important;
+            color: #ff8500;
+        }
+        
+        tr:nth-child(even) td:nth-child(7) {  /* Impact on even rows */
+            background: rgba(255, 133, 0, 0.12) !important;
+        }
+        
+        /* Distance-based glow classes - heaviest at mouse position with progressive falloff */
+        /* Fix container overflow for navbar hover effects */\n        .container {\n            overflow: visible;\n            position: relative;\n            z-index: 1;\n        }\n        \n        header {\n            overflow: visible;\n            position: relative;\n            z-index: 150;\n            margin-bottom: 0.2rem;\n            padding: 0.1rem 0;\n        }\n        \n        body {\n            overflow-x: hidden;\n            overflow-y: auto;\n        }\n        \n        /* Better rank column styling */\n        .rank-cell {\n            background: linear-gradient(135deg, #ff4500 0%, #ff6500 50%, #ff8500 100%);\n            color: #ff6500;\n            font-weight: 700;\n            font-size: 0.9em;\n            text-align: center;\n            border-radius: 6px;\n            padding: 4px 8px;\n            border: 1px solid rgba(255, 69, 0, 0.2);\n            display: inline-block;\n            min-width: 30px;\n            position: relative;\n            box-shadow: 0 1px 3px rgba(255, 69, 0, 0.2);\n        }\n        \n        .rank-cell::before {\n            content: \"#\";\n            font-size: 0.7em;\n            opacity: 0.7;\n            margin-right: 2px;\n            color: #ff4500;\n        }\n        \n        /* Rank header styling */\n        th:first-child {\n            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2), rgba(255, 69, 0, 0.1)) !important;\n            color: #ff4500 !important;\n            font-weight: 800;\n            text-transform: uppercase;\n            letter-spacing: 1px;\n            text-align: center;\n            border: 2px solid rgba(255, 69, 0, 0.3);\n            position: relative;\n        }\n        \n        /* First column (rank) specific styling */\n        td:first-child {\n            background: rgba(255, 69, 0, 0.05);\n            border-left: 2px solid rgba(255, 69, 0, 0.2);\n            text-align: center;\n            position: relative;\n        }\n        \n        /* Higher specificity glow classes to ensure they work - prevent resize issues */
+        table td.glow-distance-0 {
+            background: rgba(255, 69, 0, 0.5) !important;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.8), 0 0 12px rgba(255, 69, 0, 0.6) !important;
+            transform: scale(1.03) !important;
+            z-index: 30 !important;
+            border-radius: 6px !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: inherit !important;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.4) !important;
+            border: 1px solid rgba(255, 69, 0, 0.6) !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+        }
+        
+        table td.glow-distance-1 {
+            background: rgba(255, 69, 0, 0.25) !important;
+            box-shadow: 0 0 18px rgba(255, 69, 0, 0.6), 0 0 8px rgba(255, 69, 0, 0.4) !important;
+            transform: scale(1.02) !important;
+            z-index: 25 !important;
+            border-radius: 4px !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: inherit !important;
+            white-space: nowrap !important;
+        }
+        
+        table td.glow-distance-2 {
+            background: rgba(255, 69, 0, 0.18) !important;
+            box-shadow: 0 0 14px rgba(255, 69, 0, 0.4), 0 0 6px rgba(255, 69, 0, 0.3) !important;
+            transform: scale(1.015) !important;
+            z-index: 20 !important;
+            border-radius: 3px !important;
+            font-weight: 500 !important;
+            font-size: inherit !important;
+            white-space: nowrap !important;
+        }
+        
+        table td.glow-distance-3 {
+            background: rgba(255, 69, 0, 0.12) !important;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
+            transform: scale(1.01) !important;
+            z-index: 15 !important;
+            border-radius: 2px !important;
+            font-size: inherit !important;
+            white-space: nowrap !important;
+        }
+        
+        table td.glow-distance-4 {
+            background: rgba(255, 69, 0, 0.08) !important;
+            box-shadow: 0 0 6px rgba(255, 69, 0, 0.2) !important;
+            transform: scale(1.005) !important;
+            z-index: 10 !important;
+            font-size: inherit !important;
+            white-space: nowrap !important;
+        }
+        
+        table td.glow-distance-5 {
+            background: rgba(255, 69, 0, 0.05) !important;
+            box-shadow: 0 0 4px rgba(255, 69, 0, 0.15) !important;
+            transform: scale(1.002) !important;
+            z-index: 5 !important;
+            font-size: inherit !important;
+            white-space: nowrap !important;
+        }
+        
+        /* Prevent table layout shifts */
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .glow-distance-0 {
+            background: rgba(255, 69, 0, 0.4) !important;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.7), 0 0 10px rgba(255, 69, 0, 0.5) !important;
+            transform: scale(1.02) !important;
+            z-index: 30 !important;
+            border-radius: 6px !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.3) !important;
+        }
+        
+        .glow-distance-1 {
+            background: rgba(255, 69, 0, 0.22) !important;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5), 0 0 8px rgba(255, 69, 0, 0.3) !important;
+            transform: scale(1.015) !important;
+            z-index: 25 !important;
+            border-radius: 4px !important;
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+        
+        .glow-distance-2 {
+            background: rgba(255, 69, 0, 0.15) !important;
+            box-shadow: 0 0 12px rgba(255, 69, 0, 0.35), 0 0 6px rgba(255, 69, 0, 0.2) !important;
+            transform: scale(1.01) !important;
+            z-index: 20 !important;
+            border-radius: 3px !important;
+            color: #ffffff !important;
+            font-weight: normal !important;
+        }
+        
+        .glow-distance-3 {
+            background: rgba(255, 69, 0, 0.10) !important;
+            box-shadow: 0 0 8px rgba(255, 69, 0, 0.25), 0 0 4px rgba(255, 69, 0, 0.15) !important;
+            transform: scale(1.005) !important;
+            z-index: 15 !important;
+            border-radius: 2px !important;
+        }
+        
+        .glow-distance-4 {
+            background: rgba(255, 69, 0, 0.06) !important;
+            box-shadow: 0 0 5px rgba(255, 69, 0, 0.18), 0 0 2px rgba(255, 69, 0, 0.1) !important;
+            transform: scale(1.002) !important;
+            z-index: 10 !important;
+            border-radius: 1px !important;
+        }
+        
+        .glow-distance-5 {
+            background: rgba(255, 69, 0, 0.04) !important;
+            box-shadow: 0 0 3px rgba(255, 69, 0, 0.12) !important;
+            transform: scale(1.001) !important;
+            z-index: 5 !important;
+        }
+        
+        .metric {
+            background: linear-gradient(135deg, #ff4500, #ff6500);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: inline-block;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 2px dashed rgba(255,255,255,0.2);
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(255,69,0,0.1) 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid rgba(255, 69, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4500, #ff6500, #ff4500);
+            box-shadow: 0 0 10px #ff4500;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 69, 0, 0.4);
+            border-color: #ff4500;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff4500, #ff6500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .rank-cell {
+            background: linear-gradient(135deg, #ff4500, #ff6500);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.6);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1, h2, h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav a {
+                margin: 0.2rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 0.5rem 0.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-card">
+                <a href="javascript:void(0)" onclick="navigateToPage('players')">Players</a>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-card">
+                <a href="javascript:void(0)" onclick="navigateToPage('teams')">Teams</a>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-card">
+                <a href="javascript:void(0)" onclick="navigateToPage('about')">About</a>
+            </div>
+            
+            <div class="season-card">
+                <div class="season-switcher">
+                    <select onchange="switchSeason(this.value)" id="seasonSelect">
+                        {% if available_seasons %}
+                            {% for season in available_seasons %}
+                            <option value="{{ season }}" {% if season == current_season %}selected{% endif %}>
+                                {{ season }}
+                            </option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="2025-26">2025-26</option>
+                            <option value="2024-25">2024-25</option>
+                            <option value="2023-24">2023-24</option>
+                            <option value="2022-23">2022-23</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+        let currentSort = { column: null, ascending: true };
+        
+        function sortTable(column) {
+            const table = document.querySelector('table tbody');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            
+            // Toggle sort direction if clicking same column
+            if (currentSort.column === column) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.ascending = false; // Start with descending
+                currentSort.column = column;
+            }
+            
+            // Update arrow indicators
+            document.querySelectorAll('.sort-arrow').forEach(arrow => {
+                arrow.textContent = '↕';
+                arrow.style.opacity = '0.6';
+                arrow.style.color = 'white';
+            });
+            
+            const currentArrow = document.getElementById(`arrow-${column}`);
+            if (currentArrow) {
+                currentArrow.textContent = currentSort.ascending ? '↑' : '↓';
+                currentArrow.style.opacity = '1';
+                currentArrow.style.color = '#ff4500';
+            }
+            
+            // Get column index for sorting
+            const headers = document.querySelectorAll('th');
+            let columnIndex = -1;
+            
+            // Find the column index by looking for the onclick attribute
+            headers.forEach((header, index) => {
+                const onclick = header.getAttribute('onclick');
+                if (onclick && onclick.includes(`'${column}'`)) {
+                    columnIndex = index;
+                }
+            });
+            
+            if (columnIndex === -1) return;
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                // Check if values are numbers
+                const aNum = parseFloat(aVal);
+                const bNum = parseFloat(bVal);
+                
+                let comparison = 0;
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    comparison = aNum - bNum;
+                } else {
+                    comparison = aVal.localeCompare(bVal);
+                }
+                
+                return currentSort.ascending ? comparison : -comparison;
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => table.appendChild(row));
+            
+            // Update rank numbers
+            updateRankNumbers();
+        }
+        
+        function updateRankNumbers() {
+            const rows = document.querySelectorAll('table tbody tr');
+            rows.forEach((row, index) => {
+                const rankCell = row.querySelector('.rank-cell');
+                if (rankCell) {
+                    rankCell.textContent = index + 1;
+                }
+            });
+        }
+        
+        function switchSeason(season) {
+            // Update the current season globally
+            const currentPath = window.location.pathname;
+            
+            // Navigate to the same page with the new season
+            if (currentPath === '/teams') {
+                window.location.href = '/teams?season=' + season;
+            } else if (currentPath === '/about') {
+                window.location.href = '/about?season=' + season;
+            } else {
+                // Default to players page
+                window.location.href = '/?season=' + season;
+            }
+        }
+        
+        // Set the correct season on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const season = urlParams.get('season');
+            const select = document.getElementById('seasonSelect');
+            if (season && select) {
+                select.value = season;
+            }
+        });
+        
+                // Enhanced navigation function to prevent bugs
+        function navigateToPage(page) {
+            const currentSeason = document.getElementById('seasonSelect')?.value || '2025-26';
+            let url;
+            
+            switch(page) {
+                case 'players':
+                    url = `/?season=${currentSeason}`;
+                    break;
+                case 'teams':
+                    url = `/teams?season=${currentSeason}`;
+                    break;
+                case 'about':
+                    url = `/about?season=${currentSeason}`;
+                    break;
+                default:
+                    url = `/?season=${currentSeason}`;
+            }
+            
+            // Immediate navigation with fallback
+            try {
+                window.location.href = url;
+            } catch (e) {
+                // Fallback for any navigation issues
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 100);
+            }
+        }
+        
+        // Perfect distance-based glow effect for table cells
+        function setupTableGlow() {
+            const table = document.querySelector('table');
+            if (!table) return;
+            
+            const cells = table.querySelectorAll('td');
+            const glowClasses = ['glow-distance-0', 'glow-distance-1', 'glow-distance-2', 'glow-distance-3', 'glow-distance-4', 'glow-distance-5'];
+            
+            cells.forEach(cell => {
+                cell.addEventListener('mouseenter', function() {
+                    const hoveredRow = this.parentNode.rowIndex;
+                    const hoveredCol = this.cellIndex;
+                    
+                    // Clear all existing glow effects first
+                    cells.forEach(otherCell => {
+                        glowClasses.forEach(cls => otherCell.classList.remove(cls));
+                    });
+                    
+                    // Apply distance-0 to the hovered cell itself (heaviest glow)
+                    this.classList.add('glow-distance-0');
+                    
+                    // Calculate and apply glow to all other cells
+                    cells.forEach(otherCell => {
+                        if (otherCell === this) return; // Skip the hovered cell
+                        
+                        const otherRow = otherCell.parentNode.rowIndex;
+                        const otherCol = otherCell.cellIndex;
+                        
+                        // Calculate Manhattan distance (both vertical and horizontal)
+                        const rowDistance = Math.abs(hoveredRow - otherRow);
+                        const colDistance = Math.abs(hoveredCol - otherCol);
+                        const totalDistance = Math.max(rowDistance, colDistance);
+                        
+                        // Apply appropriate glow class based on distance
+                        if (totalDistance >= 1 && totalDistance <= 5) {
+                            otherCell.classList.add(`glow-distance-${totalDistance}`);
+                        }
+                    });
+                });
+                
+                cell.addEventListener('mouseleave', function() {
+                    // Remove all glow classes when mouse leaves any cell
+                    cells.forEach(cell => {
+                        glowClasses.forEach(cls => cell.classList.remove(cls));
+                    });
+                });
+            });
+        }
+        
+        // Initialize table glow when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupTableGlow();
+        });
+    </script>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

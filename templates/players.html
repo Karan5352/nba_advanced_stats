@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}NBA Player Stats{% endblock %}
+
+{% block content %}
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                {% for column in columns %}
+                    <th onclick="sortTable('{{ column }}')" style="cursor: pointer;">
+                        {% if column == 'PLAYER_NAME' %}Player
+                        {% elif column == 'TEAM_ABBREVIATION' %}Team
+                        {% elif column == 'PPG' %}PPG
+                        {% elif column == 'RPG' %}RPG
+                        {% elif column == 'APG' %}APG
+                        {% elif column == 'FG_PCT' %}FG%
+                        {% elif column == 'FG3_PCT' %}3P%
+                        {% elif column == 'FT_PCT' %}FT%
+                        {% elif column == 'TS_PCT' %}<span class="metric">TS%</span>
+                        {% elif column == 'Usage_Rate' %}<span class="metric">USG%</span>
+                        {% elif column == 'VIBE' %}<span class="metric">VIBE</span>
+                        {% elif column == 'PER' %}<span class="metric">PER</span>
+                        {% else %}{{ column }}
+                        {% endif %}
+                        <span class="sort-arrow" id="arrow-{{ column }}">↕</span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td><div class="rank-cell">{{ loop.index }}</div></td>
+                {% for column in columns %}
+                    <td>
+                        {% if column == 'FG_PCT' %}
+                            {% set fg_pct = (player[column]|float or 0) * 100 %}
+                            {% if fg_pct == (fg_pct|int) %}
+                                {{ "{:.0f}%".format(fg_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(fg_pct) }}
+                            {% endif %}
+                        {% elif column == 'FG3_PCT' %}
+                            {% set fg3_pct = (player[column]|float or 0) * 100 %}
+                            {% if fg3_pct == (fg3_pct|int) %}
+                                {{ "{:.0f}%".format(fg3_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(fg3_pct) }}
+                            {% endif %}
+                        {% elif column == 'FT_PCT' %}
+                            {% set ft_pct = (player[column]|float or 0) * 100 %}
+                            {% if ft_pct == (ft_pct|int) %}
+                                {{ "{:.0f}%".format(ft_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(ft_pct) }}
+                            {% endif %}
+                        {% elif column == 'TS_PCT' %}
+                            {% set ts_pct = (player[column]|float or 0) * 100 %}
+                            {% if ts_pct == (ts_pct|int) %}
+                                {{ "{:.0f}%".format(ts_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(ts_pct) }}
+                            {% endif %}
+                        {% elif column == 'USG_PCT' %}
+                            {% set usg_pct = (player[column]|float or 0) * 100 %}
+                            {% if usg_pct == (usg_pct|int) %}
+                                {{ "{:.0f}%".format(usg_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(usg_pct) }}
+                            {% endif %}
+                        {% elif column in ['PPG', 'RPG', 'APG', 'PER', 'VIBE'] %}
+                            {{ "%.1f"|format(player[column] or 0) }}
+                        {% else %}
+                            {{ player[column] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

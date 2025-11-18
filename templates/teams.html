@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}NBA Team Stats{% endblock %}
+
+{% block content %}
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                {% for column in columns %}
+                    <th onclick="sortTable('{{ column }}')" style="cursor: pointer;">
+                        {% if column == 'TEAM_NAME' %}Team
+                        {% elif column == 'W' %}Wins
+                        {% elif column == 'L' %}Losses
+                        {% elif column == 'W_PCT' %}Win%
+                        {% elif column == 'PTS' %}Points
+                        {% elif column == 'REB' %}Rebounds
+                        {% elif column == 'AST' %}Assists
+                        {% elif column == 'FG_PCT' %}FG%
+                        {% elif column == 'FG3_PCT' %}3P%
+                        {% elif column == 'OFF_RATING' %}<span class="metric">OFF RTG</span>
+                        {% elif column == 'DEF_RATING' %}<span class="metric">DEF RTG</span>
+                        {% elif column == 'NET_RATING' %}<span class="metric">NET RTG</span>
+                        {% elif column == 'TS_PCT' %}<span class="metric">TS%</span>
+                        {% else %}{{ column }}
+                        {% endif %}
+                        <span class="sort-arrow" id="arrow-{{ column }}">↕</span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <td><div class="rank-cell">{{ loop.index }}</div></td>
+                {% for column in columns %}
+                    <td>
+                        {% if column == 'FG_PCT' %}
+                            {% set fg_pct = (team[column]|float or 0) * 100 %}
+                            {% if fg_pct == (fg_pct|int) %}
+                                {{ "{:.0f}%".format(fg_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(fg_pct) }}
+                            {% endif %}
+                        {% elif column == 'FG3_PCT' %}
+                            {% set fg3_pct = (team[column]|float or 0) * 100 %}
+                            {% if fg3_pct == (fg3_pct|int) %}
+                                {{ "{:.0f}%".format(fg3_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(fg3_pct) }}
+                            {% endif %}
+                        {% elif column == 'W_PCT' %}
+                            {% set w_pct = (team[column]|float or 0) * 100 %}
+                            {% if w_pct == (w_pct|int) %}
+                                {{ "{:.0f}%".format(w_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(w_pct) }}
+                            {% endif %}
+                        {% elif column == 'TS_PCT' %}
+                            {% set ts_pct = (team[column]|float or 0) * 100 %}
+                            {% if ts_pct == (ts_pct|int) %}
+                                {{ "{:.0f}%".format(ts_pct) }}
+                            {% else %}
+                                {{ "{:.1f}%".format(ts_pct) }}
+                            {% endif %}
+                        {% elif column in ['OFF_RATING', 'DEF_RATING', 'NET_RATING'] %}
+                            {{ "%.1f"|format(team[column] or 0) }}
+                        {% elif column in ['W', 'L', 'PTS', 'REB', 'AST'] %}
+                            {{ team[column]|int if team[column] else 0 }}
+                        {% else %}
+                            {{ team[column] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

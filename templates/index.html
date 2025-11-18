@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}NBA Advanced Stats - Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to NBA Advanced Statistics</h1>
+
+<div class="stats-summary">
+    <div class="stat-card">
+        <div class="stat-value">📊</div>
+        <div class="stat-label">Player Analytics</div>
+        <p>Advanced player metrics including PER, True Shooting %, and Usage Rate</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">🏀</div>
+        <div class="stat-label">Team Analytics</div>
+        <p>Team performance metrics including Offensive/Defensive Rating and Net Rating</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">⚡</div>
+        <div class="stat-label">Real-time Data</div>
+        <p>Live NBA statistics from the official NBA API</p>
+    </div>
+</div>
+
+<h2>Navigation</h2>
+<p><strong>Player Stats:</strong> View individual player performance with advanced metrics like Player Efficiency Rating (PER) and True Shooting Percentage.</p>
+<p><strong>Team Stats:</strong> Analyze team performance with offensive/defensive ratings and net efficiency metrics.</p>
+
+<h2>Advanced Metrics Explained</h2>
+
+<h3>Player Metrics:</h3>
+<ul>
+    <li><strong>PER (Player Efficiency Rating):</strong> A comprehensive per-minute rating that sums up all positive accomplishments and subtracts negative ones</li>
+    <li><strong>True Shooting % (TS%):</strong> A measure of shooting efficiency that takes into account field goals, 3-point field goals, and free throws</li>
+    <li><strong>Usage Rate (USG%):</strong> An estimate of the percentage of team plays used by a player while on the court</li>
+</ul>
+
+<h3>Team Metrics:</h3>
+<ul>
+    <li><strong>Offensive Rating (OFF_RTG):</strong> Points scored per 100 possessions</li>
+    <li><strong>Defensive Rating (DEF_RTG):</strong> Points allowed per 100 possessions</li>
+    <li><strong>Net Rating (NET_RTG):</strong> Point differential per 100 possessions (OFF_RTG - DEF_RTG)</li>
+</ul>
+
+<div class="legend" style="margin-top: 2rem;">
+    <h3>🚀 Getting Started</h3>
+    <p>Click on <strong>Player Stats</strong> to see the top NBA players ranked by total points, with advanced efficiency metrics.</p>
+    <p>Click on <strong>Team Stats</strong> to see all NBA teams ranked by wins, with offensive and defensive performance metrics.</p>
+    <p style="margin-top: 1rem;"><strong>Season Switching:</strong> Use the dropdown in the navigation to switch between different NBA seasons (2024-25, 2023-24, 2022-23, etc.)</p>
+</div>
+{% endblock %}

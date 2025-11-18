@@ -1,0 +1,5 @@
+Flask==3.0.0
+pandas>=2.2.0
+numpy>=1.26.0
+nba_api==1.4.1
+Werkzeug==3.0.1

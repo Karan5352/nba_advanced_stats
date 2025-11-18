@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block title %}About VIBE - NBA Analytics{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="about-header">
+        <h1 class="neon-glow">🏀 VIBE Formula</h1>
+        <p class="lead">Valued Impact Basketball Estimate - Official Formula v2.0</p>
+    </div>
+
+    <div class="formula-section">
+        <h2 class="section-title">📊 What is VIBE?</h2>
+        <p>VIBE is a comprehensive basketball metric that evaluates players across three key dimensions:</p>
+        
+        <div class="vibe-components">
+            <div class="component-card offense">
+                <h3>🔥 OVIBE</h3>
+                <p><strong>Offensive Component</strong></p>
+                <p>True Shooting, Scoring, Playmaking, Offensive Rebounding</p>
+            </div>
+            
+            <div class="component-card defense">
+                <h3>🛡️ DVIBE</h3>
+                <p><strong>Defensive Component</strong></p>
+                <p>Steals, Blocks, Defensive Rebounding, Foul Management</p>
+            </div>
+            
+            <div class="component-card impact">
+                <h3>⚡ Impact</h3>
+                <p><strong>Team Performance</strong></p>
+                <p>Plus-Minus per 100 Possessions</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h2 class="section-title">🧮 The Formula</h2>
+        
+        <div class="formula-box">
+            <h3>Final VIBE Score</h3>
+            <code class="formula-main">
+                VIBE = 100 + 15 × (0.75×Skill + 0.25×Impact - LeagueMean) / LeagueStd
+            </code>
+        </div>
+
+        <div class="sub-formulas">
+            <div class="formula-breakdown">
+                <h4>🔥 Offensive VIBE (OVIBE)</h4>
+                <code>
+                    OVIBE = 1.8×TS% + 1.2×PTS₁₀₀ + 1.3×AST₁₀₀ + 0.8×ORB₁₀₀ - 1.4×TOV₁₀₀
+                </code>
+                <ul>
+                    <li><strong>True Shooting (1.8):</strong> Efficiency is paramount</li>
+                    <li><strong>Assists (1.3):</strong> Playmaking heavily valued</li>
+                    <li><strong>Scoring (1.2):</strong> Raw production matters</li>
+                    <li><strong>Turnovers (-1.4):</strong> Strongly penalized</li>
+                </ul>
+            </div>
+
+            <div class="formula-breakdown">
+                <h4>🛡️ Defensive VIBE (DVIBE)</h4>
+                <code>
+                    DVIBE = 1.3×STL₁₀₀ + 1.1×BLK₁₀₀ + 0.5×DRB₁₀₀ - 1.0×PF₁₀₀
+                </code>
+                <div class="important-note">
+                    <strong>🎯 Position-Based Normalization:</strong> All defensive stats are compared within position groups (Guards vs Guards, Wings vs Wings, Bigs vs Bigs) for fair evaluation.
+                </div>
+                <ul>
+                    <li><strong>Steals (1.3):</strong> Increased weight - most valuable defensive stat</li>
+                    <li><strong>Blocks (1.1):</strong> Strong rim protection value</li>
+                    <li><strong>Def Rebounds (0.5):</strong> Reduced weight to prevent big man bias</li>
+                    <li><strong>Fouls (-1.0):</strong> Increased penalty for poor discipline</li>
+                </ul>
+            </div>
+
+            <div class="formula-breakdown">
+                <h4>⚡ Impact Component</h4>
+                <code>
+                    Impact = Plus-Minus per 100 Possessions (z-score)
+                </code>
+                <p>Measures how much better the team performs with the player on court.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h2 class="section-title">📈 VIBE Scale</h2>
+        
+        <div class="vibe-scale">
+            <div class="scale-item mvp">
+                <span class="scale-range">140+</span>
+                <span class="scale-label">🏆 MVP Level</span>
+                <span class="scale-desc">Generational impact</span>
+            </div>
+            
+            <div class="scale-item elite">
+                <span class="scale-range">125-140</span>
+                <span class="scale-label">🌟 All-NBA</span>
+                <span class="scale-desc">Elite production</span>
+            </div>
+            
+            <div class="scale-item starter">
+                <span class="scale-range">115-125</span>
+                <span class="scale-label">⭐ Strong Starter</span>
+                <span class="scale-desc">High-level contributor</span>
+            </div>
+            
+            <div class="scale-item average">
+                <span class="scale-range">100</span>
+                <span class="scale-label">📊 League Average</span>
+                <span class="scale-desc">Baseline NBA player</span>
+            </div>
+            
+            <div class="scale-item below">
+                <span class="scale-range">85-100</span>
+                <span class="scale-label">📉 Below Average</span>
+                <span class="scale-desc">Limited impact</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h2 class="section-title">🔬 Methodology</h2>
+        
+        <div class="methodology-steps">
+            <div class="detail-item">
+                <h4>Step 1: Position Assignment</h4>
+                <p><strong>Position Groups:</strong> Players are classified into GUARDS (4+ APG), BIGS (7+ RPG), or WINGS (balanced players).</p>
+            </div>
+
+            <div class="detail-item">
+                <h4>Step 2: Position-Based Defensive Z-Scores</h4>
+                <p><strong>Key Innovation:</strong> Defensive stats (STL, BLK, DRB, PF) are normalized within position groups. Guards compete with guards, bigs with bigs, preventing positional bias.</p>
+            </div>
+
+            <div class="detail-item">
+                <h4>Step 3: Updated DVIBE Weights</h4>
+                <p><strong>New Formula:</strong> 1.3×STL + 1.1×BLK + 0.5×DRB - 1.0×PF</p>
+                <p>Reduced rebounding weight prevents big man dominance. Increased steals/fouls weights.</p>
+            </div>
+
+            <div class="detail-item">
+                <h4>Step 4: Skill Integration (60/40)</h4>
+                <p><strong>Skill = 60% OVIBE + 40% DVIBE</strong><br>Balanced offensive-defensive weighting.</p>
+            </div>
+
+            <div class="detail-item">
+                <h4>Step 5: Increased Impact Weight (35%)</h4>
+                <p><strong>VIBE = 65% Skill + 35% Impact</strong><br>Increased from 25% to better capture plus-minus impact.</p>
+            </div>
+
+            <div class="detail-item">
+                <h4>Step 6: Minutes Shrinkage & Normalization</h4>
+                <p>Minutes adjustment (MIN/(MIN+600)) followed by 100-point scaling with 15-point standard deviations.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <h2 class="section-title">🔧 Technical Details</h2>
+        
+        <div class="tech-details">
+            <div class="detail-item">
+                <h4>Z-Score Standardization</h4>
+                <p>All components are standardized relative to league averages for fair comparison across different statistical scales.</p>
+            </div>
+            
+            <div class="detail-item">
+                <h4>Minutes Shrinkage</h4>
+                <p>Low-minute players are adjusted toward league average for statistical stability using: MIN / (MIN + 600)</p>
+            </div>
+            
+            <div class="detail-item">
+                <h4>Per-100 Possessions</h4>
+                <p>All counting stats normalized to per-100 possessions: PlayerPoss = MIN × 100 / 240</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.about-header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.lead {
+    font-size: 1.4rem;
+    color: #ff8500;
+    font-weight: 300;
+}
+
+.formula-section {
+    margin-bottom: 3rem;
+    background: rgba(255, 69, 0, 0.03);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 69, 0, 0.1);
+}
+
+.section-title {
+    color: #ff4500;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.vibe-components {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.component-card {
+    background: rgba(255, 69, 0, 0.08);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+    text-align: center;
+}
+
+.component-card.offense {
+    border-left-color: #ff4500;
+}
+
+.component-card.defense {
+    border-left-color: #ff6500;
+}
+
+.component-card.impact {
+    border-left-color: #ff8500;
+}
+
+.component-card h3 {
+    color: #ff4500;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.formula-box {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 69, 0, 0.2);
+}
+
+.formula-main {
+    font-size: 1.3rem;
+    color: #ff4500;
+    font-weight: bold;
+    display: block;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.sub-formulas {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.formula-breakdown {
+    background: rgba(255, 69, 0, 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.formula-breakdown h4 {
+    color: #ff4500;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.formula-breakdown code {
+    display: block;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    color: #ff6500;
+    font-size: 0.95rem;
+}
+
+.formula-breakdown ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.formula-breakdown li {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.formula-breakdown li:before {
+    content: "▸";
+    color: #ff4500;
+    position: absolute;
+    left: 0;
+}
+
+.vibe-scale {
+    display: grid;
+    gap: 1rem;
+}
+
+.scale-item {
+    display: grid;
+    grid-template-columns: 100px 200px 1fr;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+.scale-item.mvp {
+    background: rgba(255, 215, 0, 0.1);
+    border-left-color: #ffd700;
+}
+
+.scale-item.elite {
+    background: rgba(255, 69, 0, 0.1);
+    border-left-color: #ff4500;
+}
+
+.scale-item.starter {
+    background: rgba(255, 101, 0, 0.08);
+    border-left-color: #ff6500;
+}
+
+.scale-item.average {
+    background: rgba(255, 133, 0, 0.06);
+    border-left-color: #ff8500;
+}
+
+.scale-item.below {
+    background: rgba(128, 128, 128, 0.1);
+    border-left-color: #808080;
+}
+
+.scale-range {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #ff4500;
+}
+
+.scale-label {
+    font-weight: 600;
+    color: #ff6500;
+}
+
+.scale-desc {
+    color: #ccc;
+    font-style: italic;
+}
+
+.tech-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.detail-item {
+    background: rgba(255, 69, 0, 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 69, 0, 0.1);
+}
+
+.detail-item h4 {
+    color: #ff4500;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.detail-item p {
+    line-height: 1.6;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .about-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .scale-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .vibe-components {
+        grid-template-columns: 1fr;
+    }
+    
+    .tech-details {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
