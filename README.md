@@ -1,8 +1,8 @@
 # 🏀 VIBE - NBA Advanced Analytics
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_App-orange?style=for-the-badge)](https://nba-advanced-stats.onrender.com)
-[![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat&logo=python)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-3.0-green?style=flat&logo=flask)](https://flask.palletsprojects.com)
+[![Deployment Ready](https://img.shields.io/badge/🚀_Deployment-Ready-green?style=for-the-badge)](https://github.com/Karan5352/nba_advanced_stats)
+[![Python](https://img.shields.io/badge/Python-3.10-blue?style=flat&logo=python)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-2.3-green?style=flat&logo=flask)](https://flask.palletsprojects.com)
 [![NBA API](https://img.shields.io/badge/NBA_API-Live_Data-red?style=flat&logo=nba)](https://github.com/swar/nba_api)
 
 > **Professional NBA player analytics featuring position-balanced VIBE metric | Modern Flask app with real-time NBA data**
