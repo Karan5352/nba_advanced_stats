@@ -5,7 +5,7 @@
 [![Flask](https://img.shields.io/badge/Flask-2.3-green?style=flat&logo=flask)](https://flask.palletsprojects.com)
 [![NBA API](https://img.shields.io/badge/NBA_API-Live_Data-red?style=flat&logo=nba)](https://github.com/swar/nba_api)
 
-> **Professional NBA player analytics featuring position-balanced VIBE metric | Modern Flask app with real-time NBA data**
+> **Professional NBA player analytics featuring VIBE (Valued Impact Basketball Estimate) metric | Modern Flask app with real-time NBA data**
 
 A comprehensive basketball analytics website featuring the **VIBE** metric - a sophisticated player evaluation system that combines offensive skill, defensive impact, and team performance.
 
